@@ -90,7 +90,7 @@ function createMeeting() {
 
 function getMeeting(href) {
 $.getJSON( href, function( data ) {
-showPosition({coords:{latitude: 33.8568,longitude: 16.6248}});
+showPosition({coords:{latitude:data.position.latitude,longitude:data.position.longitude}});
 //alert (data);
 });
 
