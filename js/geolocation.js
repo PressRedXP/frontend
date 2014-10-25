@@ -6,12 +6,12 @@ function getUserId() {
 }
 
 
-function getLocation() {
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(showPosition);
-} else {
-  error('Geo Location is not supported');
-}
+function getLocation(callback) {
+	if (navigator.geolocation) {
+	  	return navigator.geolocation.getCurrentPosition(callback);
+	} else {
+	  	error('Geo Location is not supported');
+	}
 }
 
 
@@ -74,21 +74,24 @@ function createMeeting() {
     for(var i = 0; i < peopleSelected.length; i++){
         peopleArray.push({id: $(peopleSelected[i]).val()});
     }
+	var latitude, longitude;
 	
-	
-	var payload = {organiser: {id: getUserId(), position:{latitude: 1, longitude: 1}}, people: peopleArray};
-	
-	$.ajax({
-		type: "POST",
-		url: "https://justmeet-backend.herokuapp.com/meetings",
-		data: JSON.stringify(payload)
-	})
-	.done(function( msg ) {
-		var data = JSON.parse(msg);
-		getMeeting(data.href);
-	});
-	 
-	
+	var position = getLocation(function(position){
+		latitude = position.coords.latitude;
+		longitude = position.coords.longitude;
+		
+		var payload = {organiser: {id: getUserId(), position:{latitude: latitude, longitude: longitude}}, people: peopleArray};
+		
+		$.ajax({
+			type: "POST",
+			url: "https://justmeet-backend.herokuapp.com/meetings",
+			data: JSON.stringify(payload)
+		})
+		.done(function( msg ) {
+			var data = JSON.parse(msg);
+			getMeeting(data.href);
+		});
+	});	
 }
 
 function getMeeting(href) {
