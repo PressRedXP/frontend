@@ -24,7 +24,7 @@ function getPeopleList() {
 
 	$.getJSON( peopleListUrl, function( data ) {
 		var items = [];
-		
+		items.push( "<li id='titleEntry' class='list-group-item disabled'>Your contacts:</li>" );
 		$.each( data.people, function( key, person ) {
 			items.push( "<li id='" + key + "' class='list-group-item'>" + person.name + "</li>" );
 		});
