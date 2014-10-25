@@ -12,27 +12,37 @@
     <link rel="stylesheet" type="text/css" href="assets/css/libs/bootstrap-theme.min.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/libs/topcoat-mobile-light.min.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/libs/topcoat-desktop-light.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
     
 </head>
 
 
 <body>
-<div class="container">
-       
-    <section class="row">
 
-        <!-- inside that you have column, with a class of col-md-[column width] ROWS ARE 12 COLUMNS WIDE-->
-
-
-        <div class="col-md-6">
-            <button type="button" class="btn btn-danger">Signup</button>
+<!-- Fixed navbar -->
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <h1 class="navbar-brand">justmeet.io</h1>
         </div>
-        <div class="col-md-6">
-            <button type="button" class="btn btn-default">Login</button>
-        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="social"><button type="button" class="btn btn-danger">Signup</button></li>
+                <li class="social"><button type="button" class="btn btn-default">Login</button></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</div>
 
-    </section>   
-    
+
+<div class="container page">
+
     <section class="row">
 
         <!-- inside that you have column, with a class of col-md-[column width] ROWS ARE 12 COLUMNS WIDE-->
@@ -46,9 +56,7 @@
             <button type="button" class="btn btn-lg btn-success" onclick="getLocation()">Go!</button>
         </div>
 
-    </section> 
-    
-    
+    </section>
     
     <section class="row">
     	<div class="col-md-6">
