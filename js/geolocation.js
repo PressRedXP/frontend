@@ -27,7 +27,6 @@ function showPosition(position) {
        map: map,
        title:"You are here!"
    });
-   }
 }
 
 function getPeopleList() {
