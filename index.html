@@ -3,61 +3,50 @@
 
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<link rel="stylesheet" href="styles/style.css" type="text/css" />
 	<title>
-		Coming Soon Page
+		Just Meet
 	</title>
-	<link rel="stylesheet" href="css/flipclock.css">
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="js/flipclock.js"></script>	
-	<script src="js/geolocation.js"></script>	
+	
+	<script src="js/geolocation.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/libs/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/libs/bootstrap-theme.min.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/libs/topcoat-mobile-light.min.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/libs/topcoat-desktop-light.min.css" />
     
 </head>
 
 
 <body>
-
-<header class="container">
-<a href="index.html" id="logo"><img src="images/bootsrap.png" alt="Coming Soon Page" /></a>
-</header>
-
-<p id="demo">Click the button to get your coordinates:</p>
-
-<button onclick="getLocation()">Try It</button>
-
-
-<div class="clock">
-<h1>We're coming soon...</h1>
-<script type="text/javascript">
-			
-			var clock;
-			$(document).ready(function() {
-				clock = $('.clock').FlipClock({
-					clockFace: 'TwentyFourHourClock'
-				});
-			});
-		</script>
-</div>
-
-
 <div class="container">
-<h2> Sign up and we'll notify you of our launch.<br />
-<div class="form-wrapper">
-<form action="" method="post"></form>
-<input type="email" name="signup-email" id="signup-email" placeholder="enter your email address" />
-<input type="submit" value="Notify Me" />
-</form>
+       
+    <section class="row">
 
-<footer id="diclaimer">
-<p><span>*</span> We won't use your email for spam, just to notify you of our launch.</p>
-</footer>
+        <!-- inside that you have column, with a class of col-md-[column width] ROWS ARE 12 COLUMNS WIDE-->
+
+
+        <div class="col-md-6">
+            <button type="button" class="btn btn-danger">Signup</button>
+        </div>
+        <div class="col-md-6">
+            <button type="button" class="btn btn-default">Login</button>
+        </div>
+
+    </section>   
+    
+    <section class="row">
+
+        <!-- inside that you have column, with a class of col-md-[column width] ROWS ARE 12 COLUMNS WIDE-->
+
+        <div class="col-md-6">
+            <h2 id="demo" >Creating meeting:</h2>
+        </div>
+
+
+        <div class="col-md-6">
+            <button type="button" class="btn btn-lg btn-success" onclick="getLocation()">Go!</button>
+        </div>
+
+    </section>    
 </div>
-</div>
-
-<footer id="main-footer">
-<p><a href="#">Follow us on Twitter</a></p>
-<p>&copy; Copyright 2014 Press RedXP. All rights reserved.</p>
-</footer>
-
 </body>
 </html>
