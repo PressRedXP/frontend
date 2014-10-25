@@ -1,3 +1,10 @@
+function getUserId() {
+    name = 'user-id'.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
 
 function getLocation() {
 if (navigator.geolocation) {
@@ -30,18 +37,12 @@ function showPosition(position) {
 }
 
 function getPeopleList() {
-	var peopleListUrl = "http://justmeet-backend.herokuapp.com/people/mrbuttons/contacts";
-	// TODO pass in my id instead of "mrbuttons"
-//    $.ajax({url: peopleListUrl,success:function(result){
-//      $("#demo").html(result);
-//    }});
+	var peopleListUrl = "http://justmeet-backend.herokuapp.com/people/" + getUserId() + "/contacts";
 
 
 	$.getJSON( peopleListUrl, function( data ) {
 		var items = [];
-//		items.push( "<li id='titleEntry' class='list-group-item disabled'>Your contacts:</li>" );
 		$.each( data.people, function( key, person ) {
-			//items.push( "<li id='" + person.id + "' class='list-group-item'>" + person.name + "</li>" );
 			items.push( "<option value='" + person.id + "' >" + person.name + "</option>" );
 		});
 		
@@ -52,20 +53,7 @@ function getPeopleList() {
 		}));
 		
 		$('.my-contacts-list').multiselect();
-	
-	
 	});
-
-
-// example POST
-//	$.ajax({
-//	  type: "POST",
-//	  url: "some.php",
-//	  data: { name: "John", location: "Boston" }
-//	})
-//	  .done(function( msg ) {
-//	    alert( "Data Saved: " + msg );
-//	  });
 }
 
 function createMeeting() {
@@ -74,16 +62,31 @@ function createMeeting() {
 	// follow href in returned JSON and GET
 	// use returned location to draw map
 	
+	var peopleSelected = $('.my-contacts-list option:selected');
+    
+    
+    if (peopleSelected.length == 0) {
+    	alert("Please pick some friends to meet");
+    	return;
+    }
+    
+    var peopleArray = [];
+    for(var i = 0; i < peopleSelected.length; i++){
+        peopleArray.push({id: $(peopleSelected[i]).val()});
+    }
+	
+	
+	var payload = {organiser: {id: getUserId(), position:{latitude: 1, longitude: 1}}, people: peopleArray};
+	
 	$.ajax({
-	type: "POST",
-	url: "https://justmeet-backend.herokuapp.com/meetings",
-	data: { }
+		type: "POST",
+		url: "https://justmeet-backend.herokuapp.com/meetings",
+		data: JSON.stringify(payload)
 	})
 	.done(function( msg ) {
-	  var data = JSON.parse(msg);
-	   getMeeting(data.href);
-	 //alert( "Data Saved: " + data.href);
-	 });
+		var data = JSON.parse(msg);
+		getMeeting(data.href);
+	});
 	 
 	
 }
