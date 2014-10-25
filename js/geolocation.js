@@ -101,3 +101,9 @@ showPosition({coords:{latitude:data.position.latitude,longitude:data.position.lo
 });
 
 }
+
+function showLoadingGif () {
+$(".loading-gif").show();
+
+}
+

@@ -75,3 +75,21 @@ footer{
 	float:left;
 	
 }
+
+.twitter_row{
+	
+	float: right;
+	font-weight: normal;
+	font-style: normal;
+}
+
+.loading-gif{
+
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-left:50px;
+	margin-top:50px;
+	display: none;
+		
+}
