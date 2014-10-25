@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="css/flipclock.css">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="js/flipclock.js"></script>	
-	
+	<script src="js/geolocation.js"></script>	
     
 </head>
 
@@ -20,6 +20,10 @@
 <header class="container">
 <a href="index.html" id="logo"><img src="images/bootsrap.png" alt="Coming Soon Page" /></a>
 </header>
+
+<p id="demo">Click the button to get your coordinates:</p>
+
+<button onclick="getLocation()">Try It</button>
 
 
 <div class="clock">
@@ -32,7 +36,7 @@
 					clockFace: 'TwentyFourHourClock'
 				});
 			});
-		</script>		</script>
+		</script>
 </div>
 
 
