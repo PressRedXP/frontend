@@ -65,8 +65,12 @@ footer{
 .map_container{
 	width: 300px;
 	height: 300px;
-	
 }
+
+.map_row{
+    padding-top:65px;
+}
+
 .container{
 	float:left;
 	
