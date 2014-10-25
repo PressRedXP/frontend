@@ -6,14 +6,27 @@
 	<title>
 		Just Meet
 	</title>
-	
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
 	<script src="js/geolocation.js"></script>
     <link rel="stylesheet" type="text/css" href="assets/css/libs/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/libs/bootstrap-theme.min.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/libs/topcoat-mobile-light.min.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/libs/topcoat-desktop-light.min.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-    
+
+<script type="text/javascript">
+			
+	var clock;
+	$(document).ready(function() {
+		$( ".get-location-button" ).bind( "click", function() {
+		  getLocation();
+		});
+	});
+</script>
+
 </head>
 
 
@@ -23,20 +36,13 @@
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <h1 class="navbar-brand">justmeet.io</h1>
-        </div>
-        <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="social"><button type="button" class="btn btn-danger">Signup</button></li>
                 <li class="social"><button type="button" class="btn btn-default">Login</button></li>
             </ul>
-        </div><!--/.nav-collapse -->
+            <h1 class="navbar-brand">justmeet.io</h1>
+        </div>
+
     </div>
 </div>
 
@@ -53,7 +59,7 @@
 
 
         <div class="col-md-6">
-            <button type="button" class="btn btn-lg btn-success" onclick="getLocation()">Go!</button>
+            <button type="button" class="btn btn-lg btn-success get-location-button" >Go!</button>
         </div>
 
     </section>
@@ -70,7 +76,7 @@
         <div class="col-md-6">
             <form action="" method="post"></form>
             	<input type="email" name="signup-email" id="signup-email" placeholder="enter your email address" />
-            	<button type="button"  class="btn btn-default">Notify Me</button>    		   			
+            	<button type="button"  class="btn btn-default">Notify Me</button>
             </form>
         </div>
     </div>

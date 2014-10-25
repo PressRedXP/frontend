@@ -11,20 +11,34 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
 }
 
+.navbar-header{
+    width:100%;
+}
+
+.navbar-collapse{
+    background:#f0f0f0;
+    padding-right:20px;
+}
+
 .navbar-brand{
     margin:0;
-    padding:0;
+    padding-top:0;
     font-size:30px;
     line-height:45px;
 }
 
 .navbar-nav{
        float:right;
+    margin-top: 1px;
 
 }
 
-.navbar-nav .btn{
-    margin-left:20px;
+.navbar-nav .btn {
+    margin-left: 20px;
+}
+
+.navbar-nav li{
+    float:right;
 }
 
 
