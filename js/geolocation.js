@@ -39,15 +39,19 @@ function getPeopleList() {
 
 	$.getJSON( peopleListUrl, function( data ) {
 		var items = [];
-		items.push( "<li id='titleEntry' class='list-group-item disabled'>Your contacts:</li>" );
+//		items.push( "<li id='titleEntry' class='list-group-item disabled'>Your contacts:</li>" );
 		$.each( data.people, function( key, person ) {
-			items.push( "<li id='" + key + "' class='list-group-item'>" + person.name + "</li>" );
+			//items.push( "<li id='" + person.id + "' class='list-group-item'>" + person.name + "</li>" );
+			items.push( "<option value='" + person.id + "' >" + person.name + "</option>" );
 		});
 		
-		$("#row-1-left").html($( "<ul/>", {
-			"class": "list-group",
+		$("#row-1-left").html($( "<select/>", {
+			"multiple": "multiple",
+			"class": "my-contacts-list",
 			html: items.join( "" )
 		}));
+		
+		$('.my-contacts-list').multiselect();
 	
 	
 	});
