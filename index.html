@@ -22,8 +22,10 @@
 			
 	var clock;
 	$(document).ready(function() {
-		$( ".get-location-button" ).bind( "click", function() {
-		  getLocation();
+		$( ".get-location-button").bind( "click", function() {
+		  //getLocation();
+		  // make-ajax request to get list of people and display
+		  getPeopleList();
 		});
 	});
 </script>
@@ -54,7 +56,7 @@
 
         <!-- inside that you have column, with a class of col-md-[column width] ROWS ARE 12 COLUMNS WIDE-->
 
-        <div class="col-md-6">
+        <div id="row-1-left" class="col-md-6">
             <h2 id="demo" >Creating meeting:</h2>
         </div>
 
