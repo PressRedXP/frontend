@@ -34,7 +34,14 @@
 		  getPeopleList();
 		  //getLocation();
 		});
+		
+		$( ".meetup-location-button").bind( "click", function() {
+		createMeeting();
+		
+		});
 	});
+	
+	
 </script>
 
 </head>
@@ -64,12 +71,13 @@
         <!-- inside that you have column, with a class of col-md-[column width] ROWS ARE 12 COLUMNS WIDE-->
 
         <div id="row-1-left" class="col-md-6">
-            <h2 id="demo" >Creating meeting:</h2>
         </div>
 
 
         <div class="col-md-6">
-            <button type="button" class="btn btn-lg btn-success get-location-button" >Go!</button>
+            <button type="button" class="btn btn-lg btn-success get-location-button">Start Meeting</button>
+            <button type="button" class="btn btn-lg btn-success meetup-location-button">Create meeting with selected people</button> 
+            
         </div>
 
     </section>

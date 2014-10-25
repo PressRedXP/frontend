@@ -68,3 +68,30 @@ function getPeopleList() {
 //	  });
 }
 
+function createMeeting() {
+
+	// POST to meetings
+	// follow href in returned JSON and GET
+	// use returned location to draw map
+	
+	$.ajax({
+	type: "POST",
+	url: "https://justmeet-backend.herokuapp.com/meetings",
+	data: { }
+	})
+	.done(function( msg ) {
+	  var data = JSON.parse(msg);
+	   getMeeting(data.href);
+	 //alert( "Data Saved: " + data.href);
+	 });
+	 
+	
+}
+
+function getMeeting(href) {
+$.getJSON( href, function( data ) {
+showPosition({coords:{latitude: 33.8568,longitude: 16.6248}});
+//alert (data);
+});
+
+}
