@@ -61,3 +61,13 @@ footer{
     bottom:0;
     border-top:1px solid #878787;
 }
+
+.map_container{
+	width: 300px;
+	height: 300px;
+	
+}
+.container{
+	float:left;
+	
+}
