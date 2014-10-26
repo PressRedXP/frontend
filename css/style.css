@@ -97,5 +97,16 @@ footer{
 
 .create-meeting-button{
 	display: none;
+	width: 300px;
+	height: 100px;
+	font-style: normal;
+	font-weight: bold;
 	
+}
+
+.start-meeting-button{
+	width:300px;
+	height:100px;
+	font-style: normal;
+	font-weight: bold;
 }
