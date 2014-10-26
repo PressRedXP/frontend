@@ -109,13 +109,26 @@ function showPosition(meeting) {
 		 },
 		 mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
-	var map = new google.maps.Map(document.getElementById("map_container"), options);
 	
+	
+	var map = new google.maps.Map(document.getElementById("map_container"), options);
+	 var contentString = meeting.vicinity;
+	 var infowindow = new google.maps.InfoWindow({
+	  content:contentString
+	  });
+	 
 	var marker = new google.maps.Marker({
 	    position: coords,
 	    map: map,
-	    title:"Lets meet at: " + meeting.pubname
+	    title:"Lets meet at: " + meeting.pubname   
+	      
 	});
+	//google.maps.event.addListener(marker, 'click', function() {
+	 //infowindow.open(map,marker);
+	infowindow.open(map,marker);
+	//});
+
+	
 	
 	$.each(meeting.people, function(key, person){
 		var personCoords = new google.maps.LatLng(person.position.latitude, person.position.longitude);
