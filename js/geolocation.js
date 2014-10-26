@@ -37,7 +37,7 @@ function acceptMeeting(href) {
 		var url = href + "/people/" + getUserId() + "/attendance";
 		
 		$.ajax({
-			type: "POST",
+			type: "PUT",
 			url: url,
 			data: JSON.stringify(payload)
 		})
