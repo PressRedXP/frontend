@@ -43,7 +43,7 @@ function showMeetingAlert(meeting) {
 
 	$('.meeting-alert-container').html(alert);
 	
-	$('.accept-meeting').bind('click', function () {
+	$('.accept-meeting').on('click touchstart', function () {
 	    acceptMeeting(meeting.href);
 	});
 	

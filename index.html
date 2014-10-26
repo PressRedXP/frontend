@@ -28,13 +28,13 @@
 			
 	var clock;
 	$(document).ready(function() {
-		$( ".start-meeting-button").bind( "click", function() {
+		$( ".start-meeting-button").on( "click touchstart", function() {
 		  getPeopleList();
 		  $(".create-meeting-button").show();
 		   $(".start-meeting-button").hide();
 		});
 		
-		$( ".create-meeting-button").bind( "click", function() {
+		$( ".create-meeting-button").on( "click touchstart", function() {
 			createMeeting();
 		});
 		
@@ -90,12 +90,11 @@
     </section>
     
     <section class="row map_row">
-    	<div class="col-md-4" ></div>
-    	<div class="col-md-4 map_container" id="map_container"><div class="loading-gif">
-    	<div id=“loader”><img src=images/ajax-loader.gif /></div>
+    	<div class="col-md-12 map_container" id="map_container">
+	    	<div class="loading-gif">
+	    		<div id=“loader”><img src=images/ajax-loader.gif /></div>
+	    	</div>
     	</div>
-    	</div>
-    	<div class="col-md-4" /></div>
     </section>
     
     <section class="row">
