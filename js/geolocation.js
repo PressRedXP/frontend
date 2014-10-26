@@ -41,7 +41,7 @@ function showMeetingAlert(meeting) {
 	var alert = '<div class="alert alert-info" role="alert">You are invited to a meeting with ' + items.join(", ") +'<a href="#" class="alert-link accept-meeting" > Accept</a></div>';
 
 
-	$('.meeting-alert-container').html(alert);
+	$('.map_container').html(alert);
 	
 	$('.accept-meeting').on('click touchstart', function () {
 	    acceptMeeting(meeting.href);
@@ -64,7 +64,7 @@ function showAwaitingConfirmationAlert(meeting) {
 	
 	var alert = '<div class="alert alert-info" role="alert">You are invited to a meeting. Awaiting confirmation from ' + unconfirmed.join(", ") + '.</div>';
 
-	$('.meeting-alert-container').html(alert);
+	$('.map_container').html(alert);
 }
 
 /**
@@ -72,6 +72,7 @@ function showAwaitingConfirmationAlert(meeting) {
  */
 function clearMeetingAlert() {
 	$('.meeting-alert-container').html("");
+	$('.map_container').html("");
 }
 
 /**
