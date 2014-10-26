@@ -1,3 +1,46 @@
+var pollingForMeetingsTime = 5000;
+var meetingsPoll;
+
+function startPollingForMeetings() {
+
+	var meetingsPollEndpoint = "http://justmeet-backend.herokuapp.com/people/" + getUserId() + "/meetings";
+
+	meetingsPoll = setInterval(function(){
+		$.getJSON(meetingsPollEndpoint, function( data ) {
+			$.each( data.meetings, function( key, meeting ) {
+				if (meeting.status === 'pending') {
+					$('.my-meetings').html("You are invited to meeting: " + meeting.href);
+					
+					var acceptButton = $('<button type="button" class="btn btn-lg btn-success accept-meeting-button">Accept</button>').click(function () {
+					        acceptMeeting(meeting.href);
+					    });
+					
+					$('.accept-meeting').html(acceptButton);
+					return;
+				}
+			});	
+		});
+	
+//	    stopPollingForMeetings();
+	    
+	}, pollingForMeetingsTime);
+
+}
+
+function acceptMeeting(href) {
+	getLocation(function(position) {
+		latitude = position.coords.latitude;
+		longitude = position.coords.longitude;
+		
+		var payload = {href: href, me: {id: getUserId(), position:{latitude: latitude, longitude: longitude}}};
+		alert(JSON.stringify(payload));
+	});
+}
+
+function stopPollingForMeetings() {
+	clearInterval(meetingsPoll);
+}
+
 function getUserId() {
     name = 'user-id'.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -95,10 +138,11 @@ function createMeeting() {
 }
 
 function getMeeting(href) {
-$.getJSON( href, function( data ) {
-showPosition({coords:{latitude:data.position.latitude,longitude:data.position.longitude}});
-//alert (data);
-});
+	$.getJSON( href, function( data ) {
+		if (data.status == "confirmed") {
+			showPosition({coords:{latitude:data.position.latitude,longitude:data.position.longitude}});
+		}
+	});
 
 }
 

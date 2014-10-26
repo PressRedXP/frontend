@@ -31,14 +31,16 @@
 		$( ".get-location-button").bind( "click", function() {
 		  //getLocation();
 		  // make-ajax request to get list of people and display
+		  stopPollingForMeetings();
 		  getPeopleList();
 		  //getLocation();
 		});
 		
 		$( ".meetup-location-button").bind( "click", function() {
-		createMeeting();
-		
+			createMeeting();
 		});
+		
+		startPollingForMeetings();
 	});
 	
 	
@@ -91,6 +93,11 @@
     	</div>
     	</div>
     	<div class="col-md-4" /></div>
+    </section>
+    
+    <section class="row">
+    	<div class="col-md-6 my-meetings" >Searching for meetings...</div>
+    	<div class="col-md-6 accept-meeting" ></div>
     </section>
 </div>
 
