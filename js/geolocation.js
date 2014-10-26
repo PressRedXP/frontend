@@ -153,15 +153,29 @@ function showLoadingGif () {
 	$(".loading-gif").show();
 }
 
+function displayMeeting(meeting) {
+	var names = [];
+	var userId = getUserId();
+	$.each(meeting.people, function(key, person){
+		if (person.id !== userId) {
+			names.push(person.name);
+		}
+	});
+	$('.meeting-alert-container').html('<div class="alert alert-success" role="alert">You are meeting ' + names.join(", ") + ' at SOME_ADDRESS.</div>');
 
-var pollForMeetings = new GetMeetings(getUserId(), showMeetingAlert, showAwaitingConfirmationAlert);
+	showPosition({coords: meeting.position});
+}
 
-function GetMeetings(userId, meetingAlertCallback, awaitingConfirmationCallback) {
+
+var pollForMeetings = new GetMeetings(getUserId(), showMeetingAlert, showAwaitingConfirmationAlert, displayMeeting);
+
+function GetMeetings(userId, meetingAlertCallback, awaitingConfirmationCallback, displayMeetingCallback) {
 	var pollTime = 5000;
 	var userId = userId;
 	var url = "http://justmeet-backend.herokuapp.com/people/" + userId + "/meetings";
 	var meetingAlertCallback = meetingAlertCallback;
 	var awaitingConfirmationCallback = awaitingConfirmationCallback;
+	var displayMeetingCallback = displayMeetingCallback;
 	var poll;
 	var that = this;
 	
@@ -184,19 +198,11 @@ function GetMeetings(userId, meetingAlertCallback, awaitingConfirmationCallback)
 						awaitingConfirmationCallback(meeting);
 					}
 				} else if (meeting.status === 'confirmed') {
-					_getMeeting(meeting.href);
+					that.stop();
+					displayMeetingCallback(meeting);
 				}
 			}
 		});	    
-	};
-	
-	var _getMeeting = function(href) {
-		$.getJSON(href, function(meeting) {
-			if (meeting.status == "confirmed") {
-				that.stop();
-				showPosition({coords: meeting.position});
-			}
-		});
 	};
 	
 	var _amIConfirmedForMeeting = function (meeting) {
