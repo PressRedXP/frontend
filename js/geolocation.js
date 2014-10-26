@@ -1,42 +1,6 @@
-var pollingForMeetingsTime = 5000;
-var meetingsPoll;
-
-function startPollingForMeetings() {
-
-	var meetingsPollEndpoint = "http://justmeet-backend.herokuapp.com/people/" + getUserId() + "/meetings";
-
-	meetingsPoll = setInterval(function(){
-		$.getJSON(meetingsPollEndpoint, function( data ) {
-			$.each( data.meetings, function( key, meeting ) {
-				if (meeting.status === 'pending') {	
-					if (!amIConfirmedForMeeting(meeting)) {
-						showMeetingAlert(meeting);
-					} else {
-						showAwaitingConfirmationAlert(meeting);
-					}
-				} else if (meeting.status === 'confirmed') {
-					getMeeting(meeting.href);
-				}
-			});	
-		});
-		    
-	}, pollingForMeetingsTime);
-
-}
-
-function amIConfirmedForMeeting(meeting) {
-
-	var myId = getUserId();
-	var amConfirmed = false;
-	$.each(meeting.people, function(key, person){
-		if ((person.id == myId) && (person.status === 'confirmed')) {
-			amConfirmed = true;
-		}
-	});
-
-	return amConfirmed;
-}
-
+/**
+ * Show an alert when user is invited to a meeting
+ */
 function showMeetingAlert(meeting) {
 	var alert = '<div class="alert alert-info" role="alert">You are invited to a meeting <a href="#" class="alert-link accept-meeting" >Accept</a></div>';
 
@@ -50,33 +14,39 @@ function showMeetingAlert(meeting) {
 //	$('.accept-meeting').html(acceptButton);
 }
 
+/**
+ * Show an alert when user has accepted a meeting, but other invitees have not yet confirmed
+ */
 function showAwaitingConfirmationAlert(meeting) {
 
 	var unconfirmed = [];
-	
 	$.each(meeting.people, function(key, person){
 		if (person.status == 'pending') {
 			unconfirmed.push(person.name);
 		}
 	});
 	
-	var alert = '<div class="alert alert-info" role="alert">You are invited to a meeting. Awaiting confirmation from ' + unconfirmed.join(" ") + '</div>';
-
+	var alert = '<div class="alert alert-info" role="alert">You are invited to a meeting. Awaiting confirmation from ' + unconfirmed.join(", ") + '.</div>';
 
 	$('.meeting-alert-container').html(alert);
-	
-	$('.accept-meeting').bind('click', function () {
-	    acceptMeeting(meeting.href);
-	});
 }
 
+/**
+ * Clear meeting alert
+ */
+function clearMeetingAlert() {
+	$('.meeting-alert-container').html("");
+}
+
+/**
+ * Make a request to the server to accept a meeting
+ */
 function acceptMeeting(href) {
 	getLocation(function(position) {
 		latitude = position.coords.latitude;
 		longitude = position.coords.longitude;
 		
 		var payload = {status: 'confirmed', position:{latitude: latitude, longitude: longitude}};
-		
 		var url = href + "/people/" + getUserId() + "/attendance";
 		
 		$.ajax({
@@ -85,17 +55,11 @@ function acceptMeeting(href) {
 			data: JSON.stringify(payload)
 		})
 		.done(function( msg ) {
-			getMeeting(href);
+			clearMeetingAlert();
 		});
-		
-		
-		
 	});
 }
 
-function stopPollingForMeetings() {
-	clearInterval(meetingsPoll);
-}
 
 function getUserId() {
     name = 'user-id'.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -115,24 +79,24 @@ function getLocation(callback) {
 
 
 function showPosition(position) {
- var coords = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-   
-   var options = {
-     zoom: 15,
-     center: coords,
-     mapTypeControl: false,
-     navigationControlOptions: {
-     	style: google.maps.NavigationControlStyle.SMALL
-     },
-     mapTypeId: google.maps.MapTypeId.ROADMAP
-   };
-   var map = new google.maps.Map(document.getElementById("test"), options);
- 
-   var marker = new google.maps.Marker({
-       position: coords,
-       map: map,
-       title:"You are here!"
-   });
+	var coords = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+	
+	var options = {
+	 zoom: 15,
+		 center: coords,
+		 mapTypeControl: false,
+		 navigationControlOptions: {
+		 	style: google.maps.NavigationControlStyle.SMALL
+		 },
+		 mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+	var map = new google.maps.Map(document.getElementById("map_container"), options);
+	
+	var marker = new google.maps.Marker({
+	    position: coords,
+	    map: map,
+	    title:"You are here!"
+	});
 }
 
 function getPeopleList() {
@@ -155,15 +119,8 @@ function getPeopleList() {
 	});
 }
 
-function createMeeting() {
-
-	// POST to meetings
-	// follow href in returned JSON and GET
-	// use returned location to draw map
-	
+function createMeeting() {	
 	var peopleSelected = $('.my-contacts-list option:selected');
-    
-    
     if (peopleSelected.length == 0) {
     	alert("Please pick some friends to meet");
     	return;
@@ -175,7 +132,7 @@ function createMeeting() {
     }
 	var latitude, longitude;
 	
-	var position = getLocation(function(position){
+	var position = getLocation(function(position) {
 		latitude = position.coords.latitude;
 		longitude = position.coords.longitude;
 		
@@ -187,24 +144,68 @@ function createMeeting() {
 			data: JSON.stringify(payload)
 		})
 		.done(function( msg ) {
-			var data = JSON.parse(msg);
-			getMeeting(data.href);
+			// TODO remove this - no action required
 		});
 	});	
 }
 
-function getMeeting(href) {
-	$.getJSON( href, function( data ) {
-		if (data.status == "confirmed") {
-			stopPollingForMeetings();
-			showPosition({coords:{latitude:data.position.latitude,longitude:data.position.longitude}});
-		}
-	});
-
-}
-
 function showLoadingGif () {
-$(".loading-gif").show();
-
+	$(".loading-gif").show();
 }
 
+
+var pollForMeetings = new GetMeetings(getUserId(), showMeetingAlert, showAwaitingConfirmationAlert);
+
+function GetMeetings(userId, meetingAlertCallback, awaitingConfirmationCallback) {
+	var pollTime = 5000;
+	var userId = userId;
+	var url = "http://justmeet-backend.herokuapp.com/people/" + userId + "/meetings";
+	var meetingAlertCallback = meetingAlertCallback;
+	var awaitingConfirmationCallback = awaitingConfirmationCallback;
+	var poll;
+	var that = this;
+	
+	this.start = function() {
+		poll = setInterval(_pollCallback, pollTime);
+	};
+	
+	this.stop = function() {
+		clearInterval(poll);
+	}
+	
+	var _pollCallback = function(){
+		$.getJSON(url, function(data) {
+			if (data.meetings.length > 2) {
+				var meeting = data.meetings[3];
+				if (meeting.status === 'pending') {	
+					if (!_amIConfirmedForMeeting(meeting)) {
+						meetingAlertCallback(meeting);
+					} else {
+						awaitingConfirmationCallback(meeting);
+					}
+				} else if (meeting.status === 'confirmed') {
+					_getMeeting(meeting.href);
+				}
+			}
+		});	    
+	};
+	
+	var _getMeeting = function(href) {
+		$.getJSON(href, function(meeting) {
+			if (meeting.status == "confirmed") {
+				that.stop();
+				showPosition({coords: meeting.position});
+			}
+		});
+	};
+	
+	var _amIConfirmedForMeeting = function (meeting) {
+		var amConfirmed = false;
+		$.each(meeting.people, function(key, person){
+			if ((person.id === userId) && (person.status === 'confirmed')) {
+				amConfirmed = true;
+			}
+		});
+		return amConfirmed;
+	}
+}
