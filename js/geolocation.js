@@ -17,11 +17,11 @@ function startPollingForMeetings() {
 					
 					$('.accept-meeting').html(acceptButton);
 					return;
+				} else if (meeting.status === 'confirmed') {
+					getMeeting(meeting.href);
 				}
 			});	
 		});
-	
-//	    stopPollingForMeetings();
 	    
 	}, pollingForMeetingsTime);
 
@@ -33,7 +33,22 @@ function acceptMeeting(href) {
 		longitude = position.coords.longitude;
 		
 		var payload = {href: href, me: {id: getUserId(), position:{latitude: latitude, longitude: longitude}}};
-		alert(JSON.stringify(payload));
+		
+		var url = href + "/people/" + getUserId() + "/attendance";
+		
+		$.ajax({
+			type: "PUT",
+			url: url,
+			data: JSON.stringify(payload),
+			contentType: "application/json"
+		})
+		.done(function( msg ) {
+			var data = JSON.parse(msg);
+			getMeeting(href);
+		});
+		
+		
+		
 	});
 }
 
@@ -140,6 +155,7 @@ function createMeeting() {
 function getMeeting(href) {
 	$.getJSON( href, function( data ) {
 		if (data.status == "confirmed") {
+			stopPollingForMeetings();
 			showPosition({coords:{latitude:data.position.latitude,longitude:data.position.longitude}});
 		}
 	});

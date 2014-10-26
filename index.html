@@ -29,11 +29,7 @@
 	var clock;
 	$(document).ready(function() {
 		$( ".get-location-button").bind( "click", function() {
-		  //getLocation();
-		  // make-ajax request to get list of people and display
-		  stopPollingForMeetings();
 		  getPeopleList();
-		  //getLocation();
 		});
 		
 		$( ".meetup-location-button").bind( "click", function() {
