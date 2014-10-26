@@ -8,8 +8,12 @@ function startPollingForMeetings() {
 	meetingsPoll = setInterval(function(){
 		$.getJSON(meetingsPollEndpoint, function( data ) {
 			$.each( data.meetings, function( key, meeting ) {
-				if (meeting.status === 'pending') {
-					showMeetingAlert(meeting);
+				if (meeting.status === 'pending') {	
+					if (!amIConfirmedForMeeting(meeting)) {
+						showMeetingAlert(meeting);
+					} else {
+						showAwaitingConfirmationAlert(meeting);
+					}
 				} else if (meeting.status === 'confirmed') {
 					getMeeting(meeting.href);
 				}
@@ -18,6 +22,19 @@ function startPollingForMeetings() {
 		    
 	}, pollingForMeetingsTime);
 
+}
+
+function amIConfirmedForMeeting(meeting) {
+
+	var myId = getUserId();
+	var amConfirmed = false;
+	$.each(meeting.people, function(key, person){
+		if ((person.id == myId) && (person.status === 'confirmed')) {
+			amConfirmed = true;
+		}
+	});
+
+	return amConfirmed;
 }
 
 function showMeetingAlert(meeting) {
@@ -31,6 +48,26 @@ function showMeetingAlert(meeting) {
 	});
 	
 //	$('.accept-meeting').html(acceptButton);
+}
+
+function showAwaitingConfirmationAlert(meeting) {
+
+	var unconfirmed = [];
+	
+	$.each(meeting.people, function(key, person){
+		if (person.status == 'pending') {
+			unconfirmed.push(person.name);
+		}
+	});
+	
+	var alert = '<div class="alert alert-info" role="alert">You are invited to a meeting. Awaiting confirmation from ' + unconfirmed.join(" ") + '</div>';
+
+
+	$('.meeting-alert-container').html(alert);
+	
+	$('.accept-meeting').bind('click', function () {
+	    acceptMeeting(meeting.href);
+	});
 }
 
 function acceptMeeting(href) {
