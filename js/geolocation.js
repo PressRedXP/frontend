@@ -118,7 +118,7 @@ function showPosition(meeting) {
 	});
 	
 	$.each(meeting.people, function(key, person){
-		var personCoords = new google.maps.LatLng(person.position.value.latitude, person.position.value.longitude);
+		var personCoords = new google.maps.LatLng(person.position.latitude, person.position.longitude);
 		new google.maps.Marker({
 		    position: personCoords,
 		    map: map,
