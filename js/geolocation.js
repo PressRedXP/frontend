@@ -21,7 +21,13 @@ function startPollingForMeetings() {
 }
 
 function showMeetingAlert(meeting) {
-	var alert = '<div class="alert alert-info" role="alert">You are invited to a meeting <a href="#" class="alert-link accept-meeting" >Accept</a></div>';
+
+    var items = [];
+    $.each( meeting.people, function( key, person ) {
+		items.push( person.name);
+	});
+
+	var alert = '<div class="alert alert-info" role="alert">You are invited to a meeting with ' + items.join( " ") +'<a href="#" class="alert-link accept-meeting" >Accept</a></div>';
 
 
 	$('.meeting-alert-container').html(alert);
