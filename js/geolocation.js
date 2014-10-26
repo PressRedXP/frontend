@@ -1,3 +1,31 @@
+function UserUtils() {
+	var userId;
+	
+	this.id = function() {
+		if (userId === undefined) {
+			userId = getUserId();
+		}
+		return userId;
+	}
+	
+	this.getLocation = function(callback) {
+		if (navigator.geolocation) {
+		  	return navigator.geolocation.getCurrentPosition(callback);
+		} else {
+		  	error('Geo Location is not supported');
+		}
+	}
+	
+	var getUserId = function() {
+	    name = 'user-id'.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+	    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+	        results = regex.exec(location.search);
+	    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
+}
+
+var userUtils = new UserUtils();
+
 /**
  * Show an alert when user is invited to a meeting
  */
@@ -42,12 +70,12 @@ function clearMeetingAlert() {
  * Make a request to the server to accept a meeting
  */
 function acceptMeeting(href) {
-	getLocation(function(position) {
+	userUtils.getLocation(function(position) {
 		latitude = position.coords.latitude;
 		longitude = position.coords.longitude;
 		
 		var payload = {status: 'confirmed', position:{latitude: latitude, longitude: longitude}};
-		var url = href + "/people/" + getUserId() + "/attendance";
+		var url = href + "/people/" + userUtils.id() + "/attendance";
 		
 		$.ajax({
 			type: "PUT",
@@ -58,23 +86,6 @@ function acceptMeeting(href) {
 			clearMeetingAlert();
 		});
 	});
-}
-
-
-function getUserId() {
-    name = 'user-id'.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
-
-
-function getLocation(callback) {
-	if (navigator.geolocation) {
-	  	return navigator.geolocation.getCurrentPosition(callback);
-	} else {
-	  	error('Geo Location is not supported');
-	}
 }
 
 
@@ -100,7 +111,7 @@ function showPosition(position) {
 }
 
 function getPeopleList() {
-	var peopleListUrl = "http://justmeet-backend.herokuapp.com/people/" + getUserId() + "/contacts";
+	var peopleListUrl = "http://justmeet-backend.herokuapp.com/people/" + userUtils.id() + "/contacts";
 
 
 	$.getJSON( peopleListUrl, function( data ) {
@@ -132,11 +143,11 @@ function createMeeting() {
     }
 	var latitude, longitude;
 	
-	var position = getLocation(function(position) {
+	var position = userUtils.getLocation(function(position) {
 		latitude = position.coords.latitude;
 		longitude = position.coords.longitude;
 		
-		var payload = {organiser: {id: getUserId(), position:{latitude: latitude, longitude: longitude}}, people: peopleArray};
+		var payload = {organiser: {id: userUtils.id(), position:{latitude: latitude, longitude: longitude}}, people: peopleArray};
 		
 		$.ajax({
 			type: "POST",
@@ -155,9 +166,8 @@ function showLoadingGif () {
 
 function displayMeeting(meeting) {
 	var names = [];
-	var userId = getUserId();
 	$.each(meeting.people, function(key, person){
-		if (person.id !== userId) {
+		if (person.id !== userUtils.id()) {
 			names.push(person.name);
 		}
 	});
@@ -167,7 +177,7 @@ function displayMeeting(meeting) {
 }
 
 
-var pollForMeetings = new GetMeetings(getUserId(), showMeetingAlert, showAwaitingConfirmationAlert, displayMeeting);
+var pollForMeetings = new GetMeetings(userUtils.id(), showMeetingAlert, showAwaitingConfirmationAlert, displayMeeting);
 
 function GetMeetings(userId, meetingAlertCallback, awaitingConfirmationCallback, displayMeetingCallback) {
 	var pollTime = 5000;
