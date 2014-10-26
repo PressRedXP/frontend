@@ -9,14 +9,7 @@ function startPollingForMeetings() {
 		$.getJSON(meetingsPollEndpoint, function( data ) {
 			$.each( data.meetings, function( key, meeting ) {
 				if (meeting.status === 'pending') {
-					$('.my-meetings').html("You are invited to meeting: " + meeting.href);
-					
-					var acceptButton = $('<button type="button" class="btn btn-lg btn-success accept-meeting-button">Accept</button>').click(function () {
-					        acceptMeeting(meeting.href);
-					    });
-					
-					$('.accept-meeting').html(acceptButton);
-					return;
+					showMeetingAlert(meeting);
 				} else if (meeting.status === 'confirmed') {
 					getMeeting(meeting.href);
 				}
@@ -25,6 +18,19 @@ function startPollingForMeetings() {
 		    
 	}, pollingForMeetingsTime);
 
+}
+
+function showMeetingAlert(meeting) {
+	var alert = '<div class="alert alert-info" role="alert">You are invited to a meeting <a href="#" class="alert-link accept-meeting" >Accept</a></div>';
+
+
+	$('.meeting-alert-container').html(alert);
+	
+	$('.accept-meeting').bind('click', function () {
+	    acceptMeeting(meeting.href);
+	});
+	
+//	$('.accept-meeting').html(acceptButton);
 }
 
 function acceptMeeting(href) {
@@ -42,7 +48,6 @@ function acceptMeeting(href) {
 			data: JSON.stringify(payload)
 		})
 		.done(function( msg ) {
-			var data = JSON.parse(msg);
 			getMeeting(href);
 		});
 		
