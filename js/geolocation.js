@@ -112,7 +112,7 @@ function showPosition(meeting) {
 	
 	
 	var map = new google.maps.Map(document.getElementById("map_container"), options);
-	 var contentString = meeting.vicinity;
+	 var contentString = meeting.pubname + ' ' + meeting.vicinity;
 	 var infowindow = new google.maps.InfoWindow({
 	  content:contentString
 	  });
