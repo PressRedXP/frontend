@@ -33,10 +33,12 @@ function showMeetingAlert(meeting) {
 
     var items = [];
     $.each( meeting.people, function( key, person ) {
-		items.push( person.name);
+	    if (person.id !== userUtils.id()) {
+	    	items.push(person.name);
+	    }
 	});
 
-	var alert = '<div class="alert alert-info" role="alert">You are invited to a meeting with ' + items.join( " ") +'<a href="#" class="alert-link accept-meeting" >Accept</a></div>';
+	var alert = '<div class="alert alert-info" role="alert">You are invited to a meeting with ' + items.join(", ") +'<a href="#" class="alert-link accept-meeting" > Accept</a></div>';
 
 
 	$('.meeting-alert-container').html(alert);
@@ -206,7 +208,7 @@ function GetMeetings(userId, meetingAlertCallback, awaitingConfirmationCallback,
 	var _pollCallback = function(){
 		$.getJSON(url, function(data) {
 			if (data.meetings.length > 0) {
-				var meeting = data.meetings[0];
+				var meeting = data.meetings[4];
 				if (meeting.status === 'pending') {	
 					if (!_amIConfirmedForMeeting(meeting)) {
 						meetingAlertCallback(meeting);
