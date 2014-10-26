@@ -97,8 +97,8 @@ function acceptMeeting(href) {
 }
 
 
-function showPosition(position) {
-	var coords = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+function showPosition(meeting) {
+	var coords = new google.maps.LatLng(meeting.position.latitude, meeting.position.longitude);
 	
 	var options = {
 	 zoom: 15,
@@ -114,8 +114,19 @@ function showPosition(position) {
 	var marker = new google.maps.Marker({
 	    position: coords,
 	    map: map,
-	    title:"You are here!"
+	    title:"Lets meet at: " + meeting.pubname
 	});
+	
+	$.each(meeting.people, function(key, person){
+		var personCoords = new google.maps.LatLng(person.position.latitude, person.position.longitude);
+		alert(person.position.latitude + ' ' + person.position.longitude);
+		new google.maps.Marker({
+		    position: personCoords,
+		    map: map,
+		    title: person.name
+		});
+	});
+	
 }
 
 function getPeopleList() {
@@ -145,9 +156,9 @@ function createMeeting() {
     	alert("Please pick some friends to meet");
     	return;
     }
-     $(".create-meeting-button").hide();
-     $(".start-meeting-button").show();
-     $(".map_container").html("");
+    $(".create-meeting-button").hide();
+    $(".start-meeting-button").show();
+    $(".map_container").html("");
     var peopleArray = [];
     for(var i = 0; i < peopleSelected.length; i++){
         peopleArray.push({id: $(peopleSelected[i]).val()});
@@ -182,9 +193,9 @@ function displayMeeting(meeting) {
 			names.push(person.name);
 		}
 	});
-	$('.meeting-alert-container').html('<div class="alert alert-success" role="alert">You are meeting ' + names.join(", ") + ' at SOME_ADDRESS.</div>');
+	$('.meeting-alert-container').html('<div class="alert alert-success" role="alert">You are meeting ' + names.join(", ") + ' at ' + meeting.pubname + '.</div>');
 
-	showPosition({coords: meeting.position});
+	showPosition(meeting);
 }
 
 
