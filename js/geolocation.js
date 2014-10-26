@@ -208,7 +208,7 @@ function GetMeetings(userId, meetingAlertCallback, awaitingConfirmationCallback,
 	var _pollCallback = function(){
 		$.getJSON(url, function(data) {
 			if (data.meetings.length > 0) {
-				var meeting = data.meetings[4];
+				var meeting = data.meetings[0];
 				if (meeting.status === 'pending') {	
 					if (!_amIConfirmedForMeeting(meeting)) {
 						meetingAlertCallback(meeting);
