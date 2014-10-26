@@ -22,7 +22,7 @@ function startPollingForMeetings() {
 				}
 			});	
 		});
-	    
+		    
 	}, pollingForMeetingsTime);
 
 }
@@ -32,15 +32,14 @@ function acceptMeeting(href) {
 		latitude = position.coords.latitude;
 		longitude = position.coords.longitude;
 		
-		var payload = {href: href, me: {id: getUserId(), position:{latitude: latitude, longitude: longitude}}};
+		var payload = {status: 'confirmed', position:{latitude: latitude, longitude: longitude}};
 		
 		var url = href + "/people/" + getUserId() + "/attendance";
 		
 		$.ajax({
-			type: "PUT",
+			type: "POST",
 			url: url,
-			data: JSON.stringify(payload),
-			contentType: "application/json"
+			data: JSON.stringify(payload)
 		})
 		.done(function( msg ) {
 			var data = JSON.parse(msg);
