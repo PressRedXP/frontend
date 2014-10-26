@@ -118,12 +118,12 @@ function showPosition(meeting) {
 	});
 	
 	$.each(meeting.people, function(key, person){
-		var personCoords = new google.maps.LatLng(person.position.latitude, person.position.longitude);
-		alert(person.position.latitude + ' ' + person.position.longitude);
+		var personCoords = new google.maps.LatLng(person.position.value.latitude, person.position.value.longitude);
 		new google.maps.Marker({
 		    position: personCoords,
 		    map: map,
-		    title: person.name
+		    title: person.name,
+		    icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
 		});
 	});
 	
