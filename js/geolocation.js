@@ -128,7 +128,7 @@ function getPeopleList() {
 			items.push( "<option value='" + person.id + "' >" + person.name + "</option>" );
 		});
 		
-		$("#row-1-left").html($( "<select/>", {
+		$("#map_container").html($( "<select/>", {
 			"multiple": "multiple",
 			"class": "my-contacts-list",
 			html: items.join( "" )
@@ -141,10 +141,13 @@ function getPeopleList() {
 function createMeeting() {	
 	var peopleSelected = $('.my-contacts-list option:selected');
     if (peopleSelected.length == 0) {
+    
     	alert("Please pick some friends to meet");
     	return;
     }
-    
+     $(".create-meeting-button").hide();
+     $(".start-meeting-button").show();
+     $(".map_container").html("");
     var peopleArray = [];
     for(var i = 0; i < peopleSelected.length; i++){
         peopleArray.push({id: $(peopleSelected[i]).val()});

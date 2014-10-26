@@ -28,11 +28,13 @@
 			
 	var clock;
 	$(document).ready(function() {
-		$( ".get-location-button").bind( "click", function() {
+		$( ".start-meeting-button").bind( "click", function() {
 		  getPeopleList();
+		  $(".create-meeting-button").show();
+		   $(".start-meeting-button").hide();
 		});
 		
-		$( ".meetup-location-button").bind( "click", function() {
+		$( ".create-meeting-button").bind( "click", function() {
 			createMeeting();
 		});
 		
@@ -75,11 +77,14 @@
 
 
         <div class="col-md-4">
-            <button type="button" class="btn btn-lg btn-success get-location-button">Start Meeting</button>
+            <button type="button" class="btn btn-lg btn-success start-meeting-button">Start Meeting</button>
+            
+            <button type="button" class="btn btn-lg btn-success create-meeting-button">Create meeting with selected people</button>
         </div>
         
+        
         <div class="col-md-4">
-        	<button type="button" class="btn btn-lg btn-success meetup-location-button">Create meeting with selected people</button>
+        	
         </div>
 
     </section>
